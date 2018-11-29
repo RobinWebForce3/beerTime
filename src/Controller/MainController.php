@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="Accueil")
+     * @Route("/", name="accueil")
      */
     public function index()
     {
-        return new Response( "Accueil du site");
+        return $this->render('main/index.html.twig');
     }
 }
