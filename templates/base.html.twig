@@ -12,6 +12,11 @@
                 <li> <a href="{{path('event_list')}}">Liste</a> </li>
             </ul>
         </nav>
+
+        <form method="GET" action="{{path('event_list')}}">
+            <input type="text" name="querySearch" placeholder="recherche...">
+            <button type="submit">Rechercher</button>
+        </form>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

@@ -19,6 +19,27 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function search(?string $name)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.name LIKE :bind')
+            ->setParameter(':bind', '%'. $name . '%')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function countIncoming()
+    {
+        return $this->createQueryBuilder('e')
+            ->select('count(e)')
+            ->andWhere('e.startAt > :bind')
+            ->setParameter(':bind', new \DateTime())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
     // /**
     //  * @return Event[] Returns an array of Event objects
     //  */

@@ -21,6 +21,18 @@ class EventService {
         return $repo->find( $id );
     }
 
+    public function search($name)
+    {
+        $repo = $this->om->getRepository( Event::class );
+        return $repo->search( $name );
+    }
+
+    public function count()
+    {
+        $repo = $this->om->getRepository( Event::class );
+        return $repo->countIncoming();
+    }
+
 }
 
 
