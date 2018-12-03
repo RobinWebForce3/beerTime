@@ -8,13 +8,15 @@
 <div>
     <h1>Hello Liste ✅</h1>
     <a href="?sort=price">Trier par prix</a>
+    <a href="?sort=date">Par date</a>
+
     {% for event in events %}
-        <h2>{{event.title}}</h2>
-        <p>{{event.description}}</p>
+        <h2>{{event.name}}</h2>
+        <p>{{event.content}}</p>
         <a href="{{ path('event_show', {id: event.id}) }}">Voir plus</a>
-        {% if date(event.start_date) <= date() and date(event.end_date) >= date() %}
+        {% if date(event.startAt) <= date() and date(event.endAt) >= date() %}
             <p>en cours</p>
-        {% elseif date(event.end_date) < date() %}
+        {% elseif date(event.endAt) < date() %}
             <p>passé</p>
         {% else %}
             <p>futur</p>
@@ -23,4 +25,5 @@
     {% endfor %}
 
 </div>
+
 {% endblock %}

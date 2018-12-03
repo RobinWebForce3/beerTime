@@ -19,14 +19,20 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function search(?string $name)
+    public function search(?string $name, $sort)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.name LIKE :bind')
-            ->setParameter(':bind', '%'. $name . '%')
-            ->getQuery()
-            ->getResult()
-        ;
+        $stmt = $this->createQueryBuilder('e');
+        $stmt->andWhere('e.name LIKE :bind')
+            ->setParameter(':bind', '%'. $name . '%');
+
+        if ($sort == "price"){
+            $stmt->orderBy('e.price', 'ASC');
+        }elseif ($sort =="date") {
+            $stmt->orderBy('e.createdAt', 'DESC');
+        }
+
+        return $stmt->getQuery()
+            ->getResult();
     }
 
     public function countIncoming()
