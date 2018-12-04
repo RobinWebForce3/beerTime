@@ -24,6 +24,12 @@
 
     {% endfor %}
 
+    {% if page > 1 %}
+        <a href="?page={{page - 1}}">Précédent</a>
+    {% endif %}
+    <span>{{page}}</span>
+    <a href="?page={{page + 1}}">Suivant</a>
+
 </div>
 
 {% endblock %}

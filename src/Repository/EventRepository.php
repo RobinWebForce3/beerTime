@@ -19,7 +19,7 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function search(?string $name, $sort)
+    public function search(?string $name, $sort, $page)
     {
         $stmt = $this->createQueryBuilder('e');
         $stmt->andWhere('e.name LIKE :bind')
@@ -30,6 +30,10 @@ class EventRepository extends ServiceEntityRepository
         }elseif ($sort =="date") {
             $stmt->orderBy('e.createdAt', 'DESC');
         }
+        
+        $limit=1;
+        $stmt->setMaxResults($limit);
+        $stmt->setFirstResult(($page-1)*$limit);
 
         return $stmt->getQuery()
             ->getResult();

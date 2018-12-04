@@ -21,9 +21,14 @@ class EventController extends AbstractController
     {
         $querySort = $request->query->get('sort');
         $querySearch = $request->query->get('querySearch');
+        $page = $request->query->get('page');
+        if (empty($page)){
+            $page=1;
+        }
         return $this->render('event/eventList.html.twig', [
-            "events" => $eventService->search($querySearch, $querySort),
+            "events" => $eventService->search($querySearch, $querySort, $page),
             "incomingEvent" => $eventService->count(),
+            "page"=>$page
         ]);
     }
 
