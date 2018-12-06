@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un évènement - {{parent()}}{% endblock %}
+
+{% block body %}
+{{ form_start(form, { 'attr': {'novalidate': 'novalidate'} }) }}
+{{ form_widget(form) }}
+<input type="submit" value="Envoyer">
+{{ form_end(form) }}
+
+{% endblock %}

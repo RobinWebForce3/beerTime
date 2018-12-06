@@ -5,11 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Service\EventService;
-
+use App\Form\EventType;
+use App\Entity\Event;
 
 class EventController extends AbstractController
 {
@@ -46,9 +48,20 @@ class EventController extends AbstractController
     /**
      * @Route("/event/new", name="event_add")
      */
-    public function add( EventService $eventService )
+    public function add( EventService $eventService, Request $req )
     {
-        return new Response( "Ajouter un événement");
+        $event = new Event();
+        $form = $this->createForm( EventType::class, $event );
+
+        $form->handleRequest( $req );
+        if ( $form->isSubmitted() && $form->isValid() ) {
+            $eventService->add( $event );
+            return $this->redirectToRoute('event_show', [ 'id' => $event->getId() ]);
+        }
+
+        return $this->render('event/add.html.twig', [
+            "form" => $form->createView()
+        ]);
     }
 
 

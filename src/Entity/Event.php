@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -20,6 +22,8 @@ class Event
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length( min = 3 )
      */
     private $name;
 
@@ -32,21 +36,28 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\GreaterThan("today")
      */
     private $startAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\GreaterThan(propertyPath="startAt")
      */
     private $endAt;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $content;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Type( type="float" )
+     * @Assert\GreaterThan( 0 )
      */
     private $price;
 
@@ -56,8 +67,23 @@ class Event
     private $poster;
 
     /**
+     * @Assert\Url
+     * @Assert\Expression(
+     *     "this.getPosterUrl() or this.getPosterFile()",
+     *     message="Vous devez saisir une URL ou charger une image"
+     * )
+     */
+    private $posterUrl;
+
+    /**
+     * @Assert\Image( maxSize = "2048k" )
+     */
+    private $posterFile;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Place", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $place;
 
@@ -87,6 +113,7 @@ class Event
         $this->categories = new ArrayCollection();
         $this->participations = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -175,6 +202,30 @@ class Event
     public function setPoster(string $poster): self
     {
         $this->poster = $poster;
+
+        return $this;
+    }
+
+    public function getPosterUrl(): ?string
+    {
+        return $this->posterUrl;
+    }
+
+    public function setPosterUrl(string $poster): self
+    {
+        $this->posterUrl = $poster;
+
+        return $this;
+    }
+
+    public function getPosterFile()
+    {
+        return $this->posterFile;
+    }
+
+    public function setPosterFile($poster): self
+    {
+        $this->posterFile = $poster;
 
         return $this;
     }
