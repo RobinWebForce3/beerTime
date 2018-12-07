@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Service\EventService;
 use App\Form\EventType;
@@ -67,6 +66,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/event/{id}/join", name="event_join", requirements={"id"="\d+"})
+     * @IsGranted("ROLE_USER")
      */
     public function join( EventService $eventService, $id )
     {
